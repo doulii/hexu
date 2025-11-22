@@ -1,0 +1,11 @@
+* HTTP Client
+
+基于原生http库
+不添加任何不必要的自以为是的设计
+按层叠加，越高越方便，越低越灵活，按需组装，方便替换
+内置多种模块，可替换
+
+
+json marshal/unmarshal
+middleware
+net/http/client
