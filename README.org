@@ -2,6 +2,6 @@
 
 Simple Solid go libraries for web service development.
 
-常用的go合集，保护以下库
+常用的go合集，包括以下库
 - httpc
 - balancer
