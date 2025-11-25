@@ -1,6 +1,5 @@
 package httpc
 
-import "net/http"
+import "github.com/doulii/hexu/httpc/types"
 
-type RequestFunc func(req *http.Request) (*http.Response, error)
-type Middleware func(next RequestFunc) RequestFunc
+type Middleware func(next types.RequestFunc) types.RequestFunc

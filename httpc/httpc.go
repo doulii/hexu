@@ -4,6 +4,9 @@ import (
 	"context"
 	"io"
 	"net/http"
+
+	"github.com/doulii/hexu/httpc/middleware"
+	"github.com/doulii/hexu/httpc/types"
 )
 
 type Client interface {
@@ -31,7 +34,7 @@ type client struct {
 	client      *http.Client
 	middlewares []Middleware
 
-	do RequestFunc
+	do types.RequestFunc
 
 	resolver Resolver
 }
@@ -56,6 +59,9 @@ func New(cfg *Config, middlewares ...Middleware) (c *client) {
 	}
 	c.do = do
 	return
+}
+func NewWithDefaultMiddleware(cfg *Config) *client {
+	return New(cfg, middleware.Logger)
 }
 
 func (c *client) mergeConfig(cfg *Config) {
