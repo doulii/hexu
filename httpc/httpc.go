@@ -10,8 +10,9 @@ import (
 )
 
 type Client interface {
-	Do(req *http.Request) (resp *http.Response, err error)
+	DoRequest(req *http.Request) (resp *http.Response, err error)
 
+	Do(ctx context.Context, method, url string, body io.Reader, options ...Option) (resp *http.Response, err error)
 	Head(ctx context.Context, url string, options ...Option) (resp *http.Response, err error)
 	Get(ctx context.Context, url string, options ...Option) (resp *http.Response, err error)
 	Delete(ctx context.Context, url string, options ...Option) (resp *http.Response, err error)
@@ -39,6 +40,12 @@ type client struct {
 	resolver Resolver
 }
 
+/*
+TODO:
+对于api请求，判断http状态码，对于成功返回的解析到响应，对于失败的解析到定义的错误结构
+支持重试
+对于api请求，打印请求和响应的body数据
+*/
 /*
 1. 底层net/http Do
 2. middleware
@@ -122,3 +129,5 @@ func (c *client) Patch(ctx context.Context, url string, body io.Reader, options 
 func (c *client) Delete(ctx context.Context, url string, options ...Option) (resp *http.Response, err error) {
 	return c.Do(ctx, http.MethodDelete, url, nil, options...)
 }
+
+var _ Client = &client{}
