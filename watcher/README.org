@@ -1,0 +1,71 @@
+* Watcher
+
+Watcher is used to observe value changes, typically in dynamic configuration.
+
+** Usage
+
+1. Define your config with ~Watcher~.
+
+#+begin_src go
+import "github.com/doulii/hexu/watcher"
+
+type Config struct {
+	Weight watcher.Watcher[int] `json:"weight"`
+}
+#+end_src
+
+2. Define your service with config.
+
+#+begin_src go
+type Service struct {
+	cfg *Config
+}
+
+func NewService(cfg *Config) *Service {
+	return &Service{cfg: cfg}
+}
+#+end_src
+
+3. Create your service and update config as needed.
+
+#+begin_src go
+func readConfig() (cfg *Config, err error) {
+	data := fmt.Sprintf(`{"weight": %d}`, rand.Intn(100))
+	cfg = &Config{}
+    err = json.Unmarshal([]byte(data), &cfg)
+	if err != nil {
+		return
+    }
+}
+
+cfg, err := readConfig()
+if err!=nil {
+    return
+}
+svc := NewService(cfg)
+go func() {
+    for range time.Tick(time.Second) {
+        if cfg0, err := readConfig(); err == nil{
+            watcher.Update(cfg, cfg0)
+        }
+    }
+}()
+#+end_src
+
+4. Now your service config can be updated.
+
+#+begin_src go
+func (s *Service) Handle(ctx context.Context) string {
+	if rand.Intn(100) < s.cfg.Weight.Get() {
+		return "hit"
+	}
+	return "miss"
+}
+#+end_src
+
+** Limitations
+
+- Nested Watchers (Watcher within Watcher) can't be updated.
+- Watcher can't be used inside slice/array.
+- Unwatch is not supported yet.
+

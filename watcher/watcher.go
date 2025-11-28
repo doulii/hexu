@@ -7,6 +7,7 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+// Watcher is used for watching value update.
 type Watcher[T any] struct {
 	l        sync.RWMutex
 	v        T
