@@ -30,8 +30,8 @@ func (c *Watcher[T]) Set(v T) {
 	}
 }
 
-// 订阅变更，会直接使用当前值调用回调函数
-// 暂不支持取消订阅
+// Subscribe to value update, f will be called immediately with current value.
+// Unwatch is not supported yet.
 func (c *Watcher[T]) Watch(f func(v T)) {
 	c.l.Lock()
 	c.watchers = append(c.watchers, f)
