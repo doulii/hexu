@@ -1,7 +1,10 @@
-* HeXu go library
+* HeXu go libraries
 
-Simple Solid go libraries for web service development.
+A collection of go libraries for microsevice development.
 
-常用的go合集，包括以下库
-- httpc
-- balancer
+| pkg      | explain                                                                               |
+|----------+---------------------------------------------------------------------------------------|
+| httpc    | http client with middleware                                                           |
+| watcher  | watch value update, typically used for dynamic config                                 |
+| balancer | common client load balancer, contains smooth-weighted-round-robin and consistent hash |
+|          |                                                                                       |
