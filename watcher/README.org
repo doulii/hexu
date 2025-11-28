@@ -6,58 +6,58 @@ Watcher is used to observe value changes, typically in dynamic configuration.
 
 1. Define your service config with ~Watcher~.
 
-#+begin_src go
-import "github.com/doulii/hexu/watcher"
+   #+begin_src go
+   import "github.com/doulii/hexu/watcher"
 
-type Config struct {
-	Weight watcher.Watcher[int] `json:"weight"`
-}
+   type Config struct {
+   	Weight watcher.Watcher[int] `json:"weight"`
+   }
 
-type Service struct {
-	cfg *Config
-}
+   type Service struct {
+   	cfg *Config
+   }
 
-func NewService(cfg *Config) *Service {
-	return &Service{cfg: cfg}
-}
-#+end_src
+   func NewService(cfg *Config) *Service {
+   	return &Service{cfg: cfg}
+   }
+   #+end_src
 
 2. Create your service and update config as needed.
 
-#+begin_src go
-func readConfig() (cfg *Config, err error) {
-	data := fmt.Sprintf(`{"weight": %d}`, rand.Intn(100))
-	cfg = &Config{}
-    err = json.Unmarshal([]byte(data), &cfg)
-	if err != nil {
-		return
-    }
-}
+   #+begin_src go
+   func readConfig() (cfg *Config, err error) {
+   	data := fmt.Sprintf(`{"weight": %d}`, rand.Intn(100))
+   	cfg = &Config{}
+       err = json.Unmarshal([]byte(data), &cfg)
+   	if err != nil {
+   		return
+       }
+   }
 
-cfg, err := readConfig()
-if err!=nil {
-    return
-}
-svc := NewService(cfg)
-go func() {
-    for range time.Tick(time.Second) {
-        if cfg0, err := readConfig(); err == nil{
-            watcher.Update(cfg, cfg0)
-        }
-    }
-}()
-#+end_src
+   cfg, err := readConfig()
+   if err!=nil {
+       return
+   }
+   svc := NewService(cfg)
+   go func() {
+       for range time.Tick(time.Second) {
+           if cfg0, err := readConfig(); err == nil{
+               watcher.Update(cfg, cfg0)
+           }
+       }
+   }()
+   #+end_src
 
 3. Now your service config can be updated.
 
-#+begin_src go
-func (s *Service) Handle(ctx context.Context) string {
-	if rand.Intn(100) < s.cfg.Weight.Get() {
-		return "hit"
-	}
-	return "miss"
-}
-#+end_src
+   #+begin_src go
+   func (s *Service) Handle(ctx context.Context) string {
+   	if rand.Intn(100) < s.cfg.Weight.Get() {
+   		return "hit"
+   	}
+   	return "miss"
+   }
+   #+end_src
 
 More examples see [[./example_test.go][examples]].
 
