@@ -4,7 +4,7 @@ Watcher is used to observe value changes, typically in dynamic configuration.
 
 ** Usage
 
-1. Define your config with ~Watcher~.
+1. Define your service config with ~Watcher~.
 
 #+begin_src go
 import "github.com/doulii/hexu/watcher"
@@ -12,11 +12,7 @@ import "github.com/doulii/hexu/watcher"
 type Config struct {
 	Weight watcher.Watcher[int] `json:"weight"`
 }
-#+end_src
 
-2. Define your service with config.
-
-#+begin_src go
 type Service struct {
 	cfg *Config
 }
@@ -26,7 +22,7 @@ func NewService(cfg *Config) *Service {
 }
 #+end_src
 
-3. Create your service and update config as needed.
+2. Create your service and update config as needed.
 
 #+begin_src go
 func readConfig() (cfg *Config, err error) {
@@ -52,7 +48,7 @@ go func() {
 }()
 #+end_src
 
-4. Now your service config can be updated.
+3. Now your service config can be updated.
 
 #+begin_src go
 func (s *Service) Handle(ctx context.Context) string {
@@ -62,6 +58,8 @@ func (s *Service) Handle(ctx context.Context) string {
 	return "miss"
 }
 #+end_src
+
+More examples see [[./example_test.go][examples]].
 
 ** Limitations
 
